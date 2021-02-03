@@ -1,0 +1,45 @@
+\documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\begin{document}
+    \title{Algoritmer og datastrukturer - ITF20006}
+    \author{Ola Wethal Petersen}
+    \date{Vår 2021}
+    
+    \maketitle
+
+    \clearpage
+
+    \tableofcontents
+    \clearpage
+
+    \section{Hva er en algoritme og algoritmeanalyse}
+
+    \subsection*{Algoritmer - definisjon}
+    En algoritme er en beskrivelse av hvordan man løser et veldefinert problem med en presist formulert sekvens av et endelig antall enkle, utvetydige og tidsbegrensende steg. De fleste dagligdagse gjøremal kan beskrives som en algoritme, f.eks oppskrifter. De fleste dataprogrammer kan også ses på som beskrivelser eller implementasjoner av en eller flere algoritmer. 
+    
+    \subsection*{Eksempel - Euklids algoritme}
+    \begin{enumerate}
+        \item Gitt to positive heltall A og B
+        \item Hvis A er mindre enn B:
+        \begin{enumerate}[label*=\arabic*.]
+            \item Sett et heltall TMP lik A
+            \item Sett A lik B
+            \item Sett B lik TMP
+        \end{enumerate}
+        \item Hvis B er lik 0:
+        \begin{enumerate}[label*=\arabic*.]
+            \item Gå til 7
+        \end{enumerate}
+        \item Sett et heltall D lik resten man får ved å dele A på B (D = A mod B)
+        \item Sett A lik D
+        \item GÅ til 2
+        \item Verdien av A er løsningen
+        \item Stopp
+    \end{enumerate}
+
+    \subsection*{Krav til en algoritme}
+    
+\end{document}
