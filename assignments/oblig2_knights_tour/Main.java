@@ -20,7 +20,7 @@ public class Main {
         System.out.println("Velg y posisjon: ");
         int yPos = Integer.parseInt(reader.readLine());
 
-        // Lukker igjen reader
+        // Lukker igjen reader.
         reader.close();
 
         solveKnightsTour(N, xPos, yPos);
@@ -28,10 +28,10 @@ public class Main {
 
     static boolean solveKnightsTour(int N, int xPos, int yPos) {
 
-        // Definerer brett med størrelse NxN
+        // Definerer brett med størrelse NxN.
         int board[][] = new int[N][N];
 
-        //Setter opp brettet og markerer alle celler med -1
+        //Setter opp brettet og markerer alle celler med -1.
         setupBoard(board, N);
 
         // Definerer lovlige trekk en springer kan gjøre. 
@@ -41,7 +41,7 @@ public class Main {
         //Markerer springerens startposisjon som 0 på brettet. 
         board[xPos][yPos] = 0;
         
-        // Ser etter gyldige veier
+        // Ser etter gyldige veier.
         if (!findTour(xPos, yPos, 1, board, xMoves, yMoves, N)) {
             System.out.println("Løsning finnes ikke");
             return false;
@@ -53,7 +53,7 @@ public class Main {
 
 
     static boolean findTour(int x, int y, int move, int board[][], int xMoves[], int yMoves[], int N) {
-        // Hvis move, som blir inkrementert hver hvert kall, er lik N*N, skal vi ha iterert over hver celle. Programmet skal da være ferdig. 
+        // Hvis move, som blir inkrementert ved hvert kall, er lik N*N, skal vi ha iterert over hver celle. Programmet skal da være ferdig. 
         if (move == N * N) {
             return true;
         }
@@ -87,7 +87,7 @@ public class Main {
         }
     }
     
-    // Sjekker om et trekk er gyldig, altså om et trekk er større eller lik null og mindre enn N. For at trekket skal være gyldig må også cellen være markert med -1. Altså at den ikke er "brukt" lenger.
+    // Sjekker om et trekk er gyldig, altså om et trekk er større eller lik null og mindre enn N. For at trekket skal være gyldig må også cellen være markert med -1. Altså at den ikke er "brukt".
     static boolean legalMove(int x, int y, int board[][], int N) {
         return (x >= 0 && x < N && y >= 0 && y < N && board[x][y] == -1);
     }
