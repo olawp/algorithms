@@ -20,6 +20,8 @@ public class Main {
 
         simulering(tidTotal, landingGjennomsnitt, taAvGjennomsnitt);
 
+        // Test for git add -p
+
 
 
     }
