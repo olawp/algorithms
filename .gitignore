@@ -5,3 +5,6 @@
 *.fdb_latexmk
 *.log
 *.toc
+*.pdf
+
+!main.pdf
