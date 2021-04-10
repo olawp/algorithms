@@ -6,6 +6,7 @@
 *.log
 *.toc
 *.pdf
-/.vscode
+*/.vscode
+
 
 !main.pdf
