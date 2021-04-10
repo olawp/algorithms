@@ -8,5 +8,5 @@
 *.pdf
 */.vscode
 
-
+!/pdfs/*.pdf
 !main.pdf
