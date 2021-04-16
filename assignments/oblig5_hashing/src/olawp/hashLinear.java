@@ -1,7 +1,7 @@
 package olawp;
 
-import java.io.IOException;
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 // Hashing av tekststrenger med lineÃ¦r probing
@@ -51,10 +51,6 @@ public class hashLinear {
         return antProbes;
     }
 
-    public String[] getHashTabell() {
-        return hashTabell;
-    }
-
     // Hashfunksjon
     int hash(String S) {
         int h = Math.abs(S.hashCode());
@@ -98,21 +94,24 @@ public class hashLinear {
         n++;
     }
 
-    public void insertLCFS(String S) {
+
+    // ------- IMPLEMENTERT AV MEG -------
+    // Usikker på om probing er gjort riktig her og i robinhood da jeg får samme antall probes på begge ??
+    // Jeg tenker sånn at det burde stemme med tanke på at probingen kun skjer ved innsetting
+    void insertLCFS(String S) {
         int h = hash(S);
         int neste = h;
 
-        // debug og testing
-        System.out.println(neste);
-
-        if (hashTabell[neste] != null)
+        if (hashTabell[neste] != null) {
             antProbes++;
+        }
 
         String currentItem = S;
 
         while (true) {
             if (hashTabell[neste] == null) {
                 hashTabell[neste] = currentItem;
+                n++;
                 return;
 
             } else {
@@ -131,55 +130,60 @@ public class hashLinear {
                     System.err.println("\nHashtabell full, avbryter");
                     System.exit(0);
                 }
-
-                n++;
             }
+
         }
+
 
     }
 
+    // ------- IMPLEMENTERT AV MEG -------
+    // Usikker på om probing er gjort riktig her og i LCFS da jeg får samme antall probes på begge ??
+    // Jeg tenker sånn at det burde stemme med tanke på at probingen kun skjer ved innsetting
+    // Er generelt sett usikker om på denne implementasjonen stemmer i det hele tatt, men det var det beste jeg kom frem til.
+    // Som sagt er nok probeantallet feil, så må nesten se på selve implementasjonen for å se om det er riktig eller ei .
     public void insertRobinHood(String S) {
         int h = hash(S);
         int neste = h;
 
-        System.out.println(neste);
-
         if (hashTabell[neste] != null) {
+            // Tror probeverdien her blir feil
             antProbes++;
         }
 
-        String currentItem = S;
+        String current = S;
 
         while (true) {
+            // Hvis det er ledig, setter vi elementet i indeksen
             if (hashTabell[neste] == null) {
-                hashTabell[neste] = currentItem;
-                return;
-
-            } else {
-                String temporary = hashTabell[neste];
-
-                // Fant noe random greier, dunno om dette stemmer atm
-                if ((hash(currentItem) - neste) > hash(temporary) - neste) {
-                    hashTabell[neste] = currentItem;
-                    currentItem = temporary;
-                }
-
-                neste++;
-
-                //Wrap-around
-                if (neste >= hashLengde) {
-                    neste = 0;
-                }
-
-                if (neste == h) {
-                    System.err.println("\nHashtabell full, avbryter");
-                    System.exit(0);
-                }
-
+                hashTabell[neste] = current;
                 n++;
+                return;
+            } else {
+                // Sammenligner hashene for å bestemme hvor mye de har flyttet på seg
+                String temp = hashTabell[neste];
+                if (hashTabell[neste] != null && ((hash(current) - neste) > (hash(temp) - neste))) {
+                    hashTabell[neste] = current;
+                    current = temp;
+                }
+
+            }
+
+            neste++;
+
+            //Wrap-around
+            if (neste >= hashLengde) {
+                neste = 0;
+            }
+
+            if (neste == h) {
+                System.err.println("\nHashtabell full, avbryter");
+                System.exit(0);
             }
 
         }
+
+
     }
 
 
@@ -226,30 +230,47 @@ public class hashLinear {
     //
     // * Tester om sÃ¸k fungerer for et par konstante verdier
     //
-    public static void main(String[] argv) {
-        System.out.println("Skriv inn tekststrenger som skal hashes. Avbryt input med ctrl+d");
-        // Hashlengde leses fra kommandolinjen
-        int hashLengde = 0;
-        Scanner input = new Scanner(System.in);
-        try {
-            if (argv.length != 1)
-                throw new IOException("Feil: Hashlengde mÃ¥ angis");
-            hashLengde = Integer.parseInt(argv[0]);
-            if (hashLengde < 1)
-                throw new IOException("Feil: Hashlengde mÃ¥ vÃ¦re stÃ¸rre enn 0");
-        } catch (Exception e) {
-            System.err.println(e);
-            System.exit(1);
-        }
 
+    // ------- IMPLEMENTERT AV MEG -------
+    // Gjort om Jan sin kode så den kan lese inn fra fil istedenfor kommandolinje siden det var teit i intellij
+    // Fjernet søk nederst i main også siden det strangt talt ikke trengs
+    public static void main(String[] argv) {
+        // Hashlengde leses fra kommandolinjen
+        System.out.println("Lengde på hashtabell?");
+        Scanner length = new Scanner(System.in);
+        int hashLengde = length.nextInt();
+
+        System.out.println("\nVelg metode: ");
+        System.out.println("(1). Last come, first served");
+        System.out.println("(2). Robin Hood\n");
+        int option = length.nextInt();
+        System.out.println("-----------");
         // Lager ny hashTabell
         hashLinear hL = new hashLinear(hashLengde);
 
-        // Leser input og hasher alle linjer
-        while (input.hasNext()) {
-            hL.insertRobinHood(input.nextLine());
-            // debug og testing
-            System.out.println(Arrays.toString(hL.getHashTabell()));
+
+        File file = new File("cars.txt");
+
+        try {
+            Scanner scanner = new Scanner(file);
+
+            if (option == 1) {
+                System.out.println("Last Come, First Served \n");
+                while (scanner.hasNext()) {
+                    hL.insertLCFS(scanner.nextLine());
+                }
+            } else if (option == 2) {
+                System.out.println("Robin Hood");
+                while (scanner.hasNext()) {
+                    hL.insertRobinHood(scanner.nextLine());
+                }
+            } else {
+                System.out.println("Noe er scuffed");
+                return;
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
         // Skriver ut hashlengde, antall data lest, antall kollisjoner
@@ -258,14 +279,6 @@ public class hashLinear {
         System.out.println("Elementer   : " + hL.antData());
         System.out.printf("Load factor : %5.3f\n", hL.loadFactor());
         System.out.println("Probes      : " + hL.antProbes());
-
-        // Et par enkle sÃ¸k
-        String S = "Volkswagen Karmann Ghia";
-        if (hL.search(S))
-            System.out.println("\"" + S + "\"" + " finnes i hashtabellen");
-        S = "Il Tempo Gigante";
-        if (!hL.search(S))
-            System.out.println("\"" + S + "\"" + " finnes ikke i hashtabellen");
 
     }
 }
